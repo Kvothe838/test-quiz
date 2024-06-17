@@ -23,7 +23,9 @@ func (h *handler) getQuiz(ctx *gin.Context) {
 
 func toGetQuizDTO(quiz models.Quiz) GetQuizDTO {
 	return GetQuizDTO{
-		Questions: toGetQuizQuestionsDTO(quiz.Questions),
+		Title:       quiz.Title,
+		Description: quiz.Description,
+		Questions:   toGetQuizQuestionsDTO(quiz.Questions),
 	}
 }
 

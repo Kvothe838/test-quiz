@@ -1,7 +1,9 @@
 package controller
 
 type GetQuizDTO struct {
-	Questions []GetQuizQuestionDTO `json:"questions"`
+	Title       string
+	Description string
+	Questions   []GetQuizQuestionDTO `json:"questions"`
 }
 
 type GetQuizQuestionDTO struct {
