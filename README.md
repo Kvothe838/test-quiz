@@ -32,10 +32,14 @@ User stories/Use cases:
 
  ## Run
 
- To run the backend, just execute on the root of the project the following command:
+ Execute on the root of the project the following commands in different console tabs:
 
  ```
-make run
+make run-backend
+```
+and
+```
+make run-client
 ```
 
 ## Test
