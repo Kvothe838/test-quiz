@@ -26,6 +26,7 @@ func (h *handler) setupRouter() {
 	h.router.Use(gin.Recovery())
 
 	h.router.GET("/health", h.health)
+	h.router.GET("/quiz", h.getQuiz)
 }
 
 func (h *handler) health(ctx *gin.Context) {

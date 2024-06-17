@@ -11,13 +11,7 @@ import (
 )
 
 func main() {
-	//filePath := flag.String("config", "", "path of configuration file")
-	//flag.Parse()
-
 	ctx := context.Background()
-
-	//var sources []config.Source
-	//conf := config.New(ctx, *filePath, sources...)
 
 	repo := memory.NewRepository()
 	interactor := services.NewInteractor(repo)
