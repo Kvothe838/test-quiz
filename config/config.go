@@ -18,15 +18,7 @@ type Source interface {
 }
 
 type Configuration struct {
-	Port     string       `mapstructure:"port"`
-	Postgres PostgresConf `mapstructure:"postgres"`
-}
-
-type PostgresConf struct {
-	User     string `mapstructure:"user"`
-	DbName   string `mapstructure:"db_name"`
-	Password string `mapstructure:"password"`
-	Host     string `mapstructure:"host"`
+	Port string `mapstructure:"port"`
 }
 
 func New(ctx context.Context, filePath string, sources ...Source) *Configuration {
@@ -61,11 +53,7 @@ func New(ctx context.Context, filePath string, sources ...Source) *Configuration
 func bindEnvironmentVariables(vip *viper.Viper) {
 	vip.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
 
-	vip.MustBindEnv("port")              // PORT
-	vip.MustBindEnv("postgres.user")     // POSTGRES_USER
-	vip.MustBindEnv("postgres.db_name")  // POSTGRES_DB_NAME
-	vip.MustBindEnv("postgres.password") // POSTGRES_PASSWORD
-	vip.MustBindEnv("postgres.host")     // POSTGRES_HOST
+	vip.MustBindEnv("port") // PORT
 }
 
 func readConfigFile(vip *viper.Viper, configFilePath string) {

@@ -28,7 +28,7 @@ User stories/Use cases:
  
  - Install golangci-lint: https://golangci-lint.run/
 
- - Create local-env/config.yaml, add same env variables than local-env/config-example.yaml and set their values according to your Postgres connection.
+ - Create local-env/config.yaml, add same env variables than local-env/config-example.yaml.
 
  ## Run
 
