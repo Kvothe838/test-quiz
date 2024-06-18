@@ -10,6 +10,8 @@ type repository interface {
 	DoesChoiceSelectionExist(ctx context.Context, selection models.ChoiceSelection) (bool, error)
 	GetChoiceSelections(ctx context.Context) ([]models.ChoiceSelection, error)
 	GetQuiz(ctx context.Context) (models.Quiz, error)
+	GetAllQuizSubmissions(ctx context.Context) ([]models.QuizSubmission, error)
+	GetQuizSubmission(ctx context.Context, submissionID int) (models.QuizSubmission, error)
 	SaveQuizSubmission(context.Context) (models.QuizSubmission, error)
 	UpdateChoiceSelection(ctx context.Context, selection models.ChoiceSelection) error
 	UpdateSubmission(ctx context.Context, submission models.QuizSubmission) error

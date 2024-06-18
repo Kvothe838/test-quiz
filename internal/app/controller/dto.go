@@ -18,5 +18,6 @@ type GetQuizAnswerDTO struct {
 }
 
 type SubmitQuizResultDTO struct {
-	HitsAmount int `json:"hits_amount"`
+	HitsAmount           int `json:"hits_amount"`
+	BetterThanPercentage int `json:"better_than_percentage"`
 }

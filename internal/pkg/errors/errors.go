@@ -6,6 +6,7 @@ var (
 	ChoiceNotExistsErr         = errors.New("choice ID does not exist")
 	QuestionNotExistsErr       = errors.New("question ID does not exist")
 	SelectedChoiceNotExistsErr = errors.New("selected choice does not exist")
+	QuizAlreadySubmittedErr    = errors.New("quiz already submitted")
 )
 
 type MissingChoicesSelectionErr struct {

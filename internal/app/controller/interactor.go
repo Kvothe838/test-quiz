@@ -6,7 +6,8 @@ import (
 )
 
 type Interactor interface {
-	SubmitQuiz(ctx context.Context) (int, error)
+	CalcBetterThanPercentage(ctx context.Context, submissionID int) (int, error)
 	GetQuiz(ctx context.Context) (models.Quiz, error)
 	SelectChoice(ctx context.Context, selection models.ChoiceSelection) error
+	SubmitQuiz(ctx context.Context) (models.QuizSubmission, error)
 }

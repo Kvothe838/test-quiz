@@ -6,9 +6,9 @@ run-backend: ## It runs the main app for backend
 run-client: ## It runs the main app for client
 	go run main.go
 
-.PHONY: quiz
-quiz: ## It runs quiz command on client
-	go run main.go quiz
+.PHONY: get-quiz
+get-quiz: ## It runs quiz command on client
+	go run main.go get-quiz
 
 .PHONY: select-choice
 select-choice:

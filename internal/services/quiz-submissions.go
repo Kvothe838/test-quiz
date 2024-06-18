@@ -7,24 +7,24 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (in *interactor) SubmitQuiz(ctx context.Context) (int, error) {
+func (in *interactor) SubmitQuiz(ctx context.Context) (models.QuizSubmission, error) {
 	missingChoiceSelections, err := in.getMissingChoiceSelections(ctx)
 	if err != nil {
-		return 0, errors.Wrap(err, "could not get missing choice selections")
+		return models.QuizSubmission{}, errors.Wrap(err, "could not get missing choice selections")
 	}
 
 	if len(missingChoiceSelections) != 0 {
-		return 0, internalerrors.MissingChoicesSelectionErr{QuestionIDs: missingChoiceSelections}
+		return models.QuizSubmission{}, internalerrors.MissingChoicesSelectionErr{QuestionIDs: missingChoiceSelections}
 	}
 
 	submission, err := in.repo.SaveQuizSubmission(ctx)
 	if err != nil {
-		return 0, errors.Wrap(err, "could not confirm choices")
+		return models.QuizSubmission{}, errors.Wrap(err, "could not confirm choices")
 	}
 
 	quiz, err := in.repo.GetQuiz(ctx)
 	if err != nil {
-		return 0, errors.Wrap(err, "could not get quiz to assert results")
+		return models.QuizSubmission{}, errors.Wrap(err, "could not get quiz to assert results")
 	}
 
 	hitsAmount := CalcHits(quiz.Questions, submission.Selections)
@@ -33,10 +33,10 @@ func (in *interactor) SubmitQuiz(ctx context.Context) (int, error) {
 
 	err = in.repo.UpdateSubmission(ctx, submission)
 	if err != nil {
-		return 0, errors.Wrap(err, "could not update submission")
+		return models.QuizSubmission{}, errors.Wrap(err, "could not update submission")
 	}
 
-	return hitsAmount, nil
+	return submission, nil
 }
 
 func CalcHits(questions []models.Question, selections []models.ChoiceSelection) int {
@@ -92,4 +92,34 @@ func (in *interactor) getMissingChoiceSelections(ctx context.Context) ([]int, er
 	}
 
 	return missingQuestionIDs, nil
+}
+
+func (in *interactor) CalcBetterThanPercentage(ctx context.Context, submissionID int) (int, error) {
+	submissions, err := in.repo.GetAllQuizSubmissions(ctx)
+	if err != nil {
+		return 0, errors.Wrap(err, "could not get all quiz submissions")
+	}
+
+	submissionToCalc, err := in.repo.GetQuizSubmission(ctx, submissionID)
+	if err != nil {
+		return 0, errors.Wrapf(err, "coul nod get quiz submission for id %d", submissionID)
+	}
+
+	betterThanAmount := 0
+
+	for _, submission := range submissions {
+		if submission.ID == submissionID {
+			continue
+		}
+
+		if submissionToCalc.HitsAmount > submission.HitsAmount {
+			betterThanAmount++
+		}
+	}
+
+	submissionsAmount := len(submissions) - 1
+	betterThanPercentage := int(float64(betterThanAmount) / float64(submissionsAmount) * 100)
+
+	return betterThanPercentage, nil
+
 }

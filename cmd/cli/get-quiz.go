@@ -10,7 +10,7 @@ import (
 )
 
 var quizCmd = &cobra.Command{
-	Use:   "quiz",
+	Use:   "get-quiz",
 	Short: "Get a quiz",
 	Long:  `This command fetches a quiz from quiz api`,
 	Run: func(cmd *cobra.Command, args []string) {

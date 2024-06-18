@@ -9,6 +9,7 @@ type repository struct {
 	quiz                         models.Quiz
 	currentSelectionByQuestionID map[int]models.ChoiceSelection
 	quizSubmissions              []models.QuizSubmission
+	submitted                    bool
 }
 
 func NewRepository() *repository {
@@ -16,7 +17,7 @@ func NewRepository() *repository {
 	return &repository{
 		quiz:                         quiz,
 		currentSelectionByQuestionID: make(map[int]models.ChoiceSelection),
-		quizSubmissions:              getFakeQuizSubmissons(quiz.Questions),
+		quizSubmissions:              getFakeQuizSubmissions(quiz.Questions),
 	}
 }
 
@@ -154,14 +155,14 @@ func getFakeQuiz() models.Quiz {
 	}
 }
 
-func getFakeQuizSubmissons(questions []models.Question) []models.QuizSubmission {
+func getFakeQuizSubmissions(questions []models.Question) []models.QuizSubmission {
 	submissions := []models.QuizSubmission{
 		{
 			ID: 1,
 			Selections: []models.ChoiceSelection{
 				{
 					QuestionID: 1,
-					ChoiceID:   1,
+					ChoiceID:   2,
 				},
 				{
 					QuestionID: 2,
@@ -217,7 +218,7 @@ func getFakeQuizSubmissons(questions []models.Question) []models.QuizSubmission 
 				},
 				{
 					QuestionID: 2,
-					ChoiceID:   4,
+					ChoiceID:   1,
 				},
 
 				{
@@ -261,7 +262,7 @@ func getFakeQuizSubmissons(questions []models.Question) []models.QuizSubmission 
 			},
 		},
 	}
-	
+
 	for index, submission := range submissions {
 		submissions[index].HitsAmount = services.CalcHits(questions, submission.Selections)
 	}
