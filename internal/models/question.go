@@ -8,10 +8,10 @@ type Quiz struct {
 type Question struct {
 	ID          int
 	Description string
-	Answers     []AnswerOption
+	Choices     []Choice
 }
 
-type AnswerOption struct {
+type Choice struct {
 	ID          int
 	Description string
 	IsCorrect   bool

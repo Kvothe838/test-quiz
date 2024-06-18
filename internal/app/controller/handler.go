@@ -27,6 +27,7 @@ func (h *handler) setupRouter() {
 
 	h.router.GET("/health", h.health)
 	h.router.GET("/quiz", h.getQuiz)
+	h.router.POST("/choice-selection", h.selectChoice)
 }
 
 func (h *handler) health(ctx *gin.Context) {

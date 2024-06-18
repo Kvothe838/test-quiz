@@ -3,14 +3,14 @@ package memory
 import "github.com/Kvothe838/fast-track-test-quiz/internal/models"
 
 type repository struct {
-	quiz        models.Quiz
-	submissions []models.Submission
+	quiz                         models.Quiz
+	currentSelectionByQuestionID map[int]models.ChoiceSelection
 }
 
 func NewRepository() *repository {
 	return &repository{
-		quiz:        getFakeQuiz(),
-		submissions: []models.Submission{},
+		quiz:                         getFakeQuiz(),
+		currentSelectionByQuestionID: make(map[int]models.ChoiceSelection),
 	}
 }
 
@@ -22,7 +22,7 @@ func getFakeQuiz() models.Quiz {
 			{
 				ID:          1,
 				Description: "Which industry is Fast Track revolutionising?",
-				Answers: []models.AnswerOption{
+				Choices: []models.Choice{
 					{
 						ID:          1,
 						Description: "iGaming",
@@ -48,7 +48,7 @@ func getFakeQuiz() models.Quiz {
 			{
 				ID:          2,
 				Description: "Which are three Fast Track's promises?",
-				Answers: []models.AnswerOption{
+				Choices: []models.Choice{
 					{
 						ID:          1,
 						Description: "Don't Settle, Work Smarter, Be Transparent",
@@ -74,7 +74,7 @@ func getFakeQuiz() models.Quiz {
 			{
 				ID:          3,
 				Description: "How can Fast Track help you?",
-				Answers: []models.AnswerOption{
+				Choices: []models.Choice{
 					{
 						ID:          1,
 						Description: "By accessing consolidated, actionable data in one central location, enabling faster decision-making",
@@ -100,7 +100,7 @@ func getFakeQuiz() models.Quiz {
 			{
 				ID:          4,
 				Description: "Can BetConstruct be integrated to your CRM using Fast Track?",
-				Answers: []models.AnswerOption{
+				Choices: []models.Choice{
 					{
 						ID:          1,
 						Description: "Yes",
@@ -116,7 +116,7 @@ func getFakeQuiz() models.Quiz {
 			{
 				ID:          5,
 				Description: "What is the name of comprehensive Fast Track's intelligence hub focused on data-driven innovation?",
-				Answers: []models.AnswerOption{
+				Choices: []models.Choice{
 					{
 						ID:          1,
 						Description: "The Singularity Project",

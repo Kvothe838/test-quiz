@@ -7,8 +7,12 @@ run-client: ## It runs the main app for client
 	go run main.go
 
 .PHONY: quiz
-get-quiz: ## It runs quiz command on client
+quiz: ## It runs quiz command on client
 	go run main.go quiz
+
+.PHONY: select-choice
+select-choice:
+	go run main.go select-choice $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: lint
 lint: ## It starts the linter report
@@ -17,3 +21,7 @@ lint: ## It starts the linter report
 .PHONY: test
 test: ## It runs the tests
 	go test ./...
+
+
+%:
+	@:

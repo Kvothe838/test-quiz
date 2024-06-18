@@ -39,17 +39,17 @@ func toGetQuizQuestionDTO(question models.Question) GetQuizQuestionDTO {
 	return GetQuizQuestionDTO{
 		ID:          question.ID,
 		Description: question.Description,
-		Answers:     toGetQuizAnswersDTO(question.Answers),
+		Answers:     toGetQuizAnswersDTO(question.Choices),
 	}
 }
 
-func toGetQuizAnswersDTO(answers []models.AnswerOption) []GetQuizAnswerDTO {
-	return lo.Map(answers, func(answer models.AnswerOption, _ int) GetQuizAnswerDTO {
+func toGetQuizAnswersDTO(answers []models.Choice) []GetQuizAnswerDTO {
+	return lo.Map(answers, func(answer models.Choice, _ int) GetQuizAnswerDTO {
 		return toGetQuizAnswerDTO(answer)
 	})
 }
 
-func toGetQuizAnswerDTO(answer models.AnswerOption) GetQuizAnswerDTO {
+func toGetQuizAnswerDTO(answer models.Choice) GetQuizAnswerDTO {
 	return GetQuizAnswerDTO{
 		ID:          answer.ID,
 		Description: answer.Description,
