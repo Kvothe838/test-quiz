@@ -20,7 +20,7 @@ func (in *interactor) SelectChoice(ctx context.Context, selection models.ChoiceS
 		return nil
 	}
 
-	err = in.repo.CreateOptionSelection(ctx, selection)
+	err = in.repo.CreateChoiceSelection(ctx, selection)
 	if err != nil {
 		return errors.Wrap(err, "could not create option selection")
 	}

@@ -16,3 +16,7 @@ type GetQuizAnswerDTO struct {
 	ID          int    `json:"id"`
 	Description string `json:"description"`
 }
+
+type SubmitQuizResultDTO struct {
+	HitsAmount int `json:"hits_amount"`
+}

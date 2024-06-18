@@ -1,16 +1,22 @@
 package memory
 
-import "github.com/Kvothe838/fast-track-test-quiz/internal/models"
+import (
+	"github.com/Kvothe838/fast-track-test-quiz/internal/models"
+	"github.com/Kvothe838/fast-track-test-quiz/internal/services"
+)
 
 type repository struct {
 	quiz                         models.Quiz
 	currentSelectionByQuestionID map[int]models.ChoiceSelection
+	quizSubmissions              []models.QuizSubmission
 }
 
 func NewRepository() *repository {
+	quiz := getFakeQuiz()
 	return &repository{
-		quiz:                         getFakeQuiz(),
+		quiz:                         quiz,
 		currentSelectionByQuestionID: make(map[int]models.ChoiceSelection),
+		quizSubmissions:              getFakeQuizSubmissons(quiz.Questions),
 	}
 }
 
@@ -146,4 +152,119 @@ func getFakeQuiz() models.Quiz {
 			},
 		},
 	}
+}
+
+func getFakeQuizSubmissons(questions []models.Question) []models.QuizSubmission {
+	submissions := []models.QuizSubmission{
+		{
+			ID: 1,
+			Selections: []models.ChoiceSelection{
+				{
+					QuestionID: 1,
+					ChoiceID:   1,
+				},
+				{
+					QuestionID: 2,
+					ChoiceID:   2,
+				},
+
+				{
+					QuestionID: 3,
+					ChoiceID:   3,
+				},
+				{
+					QuestionID: 4,
+					ChoiceID:   1,
+				},
+				{
+					QuestionID: 5,
+					ChoiceID:   5,
+				},
+			},
+		},
+		{
+			ID: 2,
+			Selections: []models.ChoiceSelection{
+				{
+					QuestionID: 1,
+					ChoiceID:   3,
+				},
+				{
+					QuestionID: 2,
+					ChoiceID:   1,
+				},
+
+				{
+					QuestionID: 3,
+					ChoiceID:   1,
+				},
+				{
+					QuestionID: 4,
+					ChoiceID:   2,
+				},
+				{
+					QuestionID: 5,
+					ChoiceID:   4,
+				},
+			},
+		},
+		{
+			ID: 3,
+			Selections: []models.ChoiceSelection{
+				{
+					QuestionID: 1,
+					ChoiceID:   2,
+				},
+				{
+					QuestionID: 2,
+					ChoiceID:   4,
+				},
+
+				{
+					QuestionID: 3,
+					ChoiceID:   2,
+				},
+				{
+					QuestionID: 4,
+					ChoiceID:   1,
+				},
+				{
+					QuestionID: 5,
+					ChoiceID:   1,
+				},
+			},
+		},
+		{
+			ID: 4,
+			Selections: []models.ChoiceSelection{
+				{
+					QuestionID: 1,
+					ChoiceID:   4,
+				},
+				{
+					QuestionID: 2,
+					ChoiceID:   4,
+				},
+
+				{
+					QuestionID: 3,
+					ChoiceID:   4,
+				},
+				{
+					QuestionID: 4,
+					ChoiceID:   2,
+				},
+				{
+					QuestionID: 5,
+					ChoiceID:   5,
+				},
+			},
+		},
+	}
+	
+	for index, submission := range submissions {
+		submissions[index].HitsAmount = services.CalcHits(questions, submission.Selections)
+	}
+
+	return submissions
 }

@@ -6,10 +6,13 @@ import (
 )
 
 type repository interface {
-	GetQuiz(ctx context.Context) (models.Quiz, error)
-	CreateOptionSelection(ctx context.Context, selection models.ChoiceSelection) error
+	CreateChoiceSelection(ctx context.Context, selection models.ChoiceSelection) error
 	DoesChoiceSelectionExist(ctx context.Context, selection models.ChoiceSelection) (bool, error)
+	GetChoiceSelections(ctx context.Context) ([]models.ChoiceSelection, error)
+	GetQuiz(ctx context.Context) (models.Quiz, error)
+	SaveQuizSubmission(context.Context) (models.QuizSubmission, error)
 	UpdateChoiceSelection(ctx context.Context, selection models.ChoiceSelection) error
+	UpdateSubmission(ctx context.Context, submission models.QuizSubmission) error
 }
 
 func NewInteractor(repo repository) *interactor {

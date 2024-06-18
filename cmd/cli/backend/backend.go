@@ -8,10 +8,10 @@ import (
 	"net/http"
 )
 
-func PostData(url string, data any) ([]byte, error) {
+func PostData(url string, data any) ([]byte, int, error) {
 	marshalled, err := json.Marshal(data)
 	if err != nil {
-		return nil, errors.Wrap(err, "could not marshal data")
+		return nil, 0, errors.Wrap(err, "could not marshal data")
 	}
 
 	request, err := http.NewRequest(
@@ -21,20 +21,33 @@ func PostData(url string, data any) ([]byte, error) {
 	)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "Could not build POST request")
+		return nil, 0, errors.Wrap(err, "Could not build POST request")
 	}
 
 	request.Header.Add("Accept", "application/json")
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
-		return nil, errors.Wrap(err, "Could not make a POST request")
+		return nil, 0, errors.Wrap(err, "Could not make a POST request")
 	}
 
 	responseBytes, err := io.ReadAll(response.Body)
 	if err != nil {
-		return nil, errors.Wrap(err, "Could not read response body")
+		return nil, 0, errors.Wrap(err, "Could not read response body")
 	}
 
-	return responseBytes, nil
+	return responseBytes, response.StatusCode, nil
+}
+
+func BuildResponseError(resData []byte) error {
+	var res struct {
+		Message string `json:"message"`
+	}
+
+	err := json.Unmarshal(resData, &res)
+	if err != nil {
+		return errors.Wrap(err, "could not unmarshal choices confirmation error")
+	}
+
+	return errors.New(res.Message)
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/Kvothe838/fast-track-test-quiz/cmd/cli/backend"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"net/http"
 	"strconv"
 )
 
@@ -20,7 +21,7 @@ var selectChoiceCmd = &cobra.Command{
 			return
 		}
 
-		choiceID, err := strconv.Atoi(args[0])
+		choiceID, err := strconv.Atoi(args[1])
 		if err != nil {
 			fmt.Println("Second arg must be a number representing selected choice ID")
 			return
@@ -28,7 +29,8 @@ var selectChoiceCmd = &cobra.Command{
 
 		err = postChoiceSelection(questionID, choiceID)
 		if err != nil {
-			fmt.Println("An error occurred when selecting option.")
+			fmt.Println("An error occurred when selecting choice.")
+			return
 		}
 
 		fmt.Printf("Successfully saved choice %d for question %d\n", choiceID, questionID)
@@ -48,9 +50,13 @@ func postChoiceSelection(questionID, choiceID int) error {
 
 	data.QuestionID = questionID
 	data.ChoiceID = choiceID
-	_, err := backend.PostData(url, data)
+	resData, statusCode, err := backend.PostData(url, data)
 	if err != nil {
 		return errors.Wrap(err, "could not post data")
+	}
+
+	if statusCode != http.StatusCreated {
+		return backend.BuildResponseError(resData)
 	}
 
 	return nil

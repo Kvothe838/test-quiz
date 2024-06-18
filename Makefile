@@ -14,6 +14,10 @@ quiz: ## It runs quiz command on client
 select-choice:
 	go run main.go select-choice $(filter-out $@,$(MAKECMDGOALS))
 
+.PHONY: submit-quiz
+submit-quiz:
+	go run main.go submit-quiz
+
 .PHONY: lint
 lint: ## It starts the linter report
 	@golangci-lint run --color always ./...

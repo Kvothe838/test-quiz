@@ -52,5 +52,5 @@ func (h *handler) selectChoice(ctx *gin.Context) {
 		return
 	}
 
-	ctx.Status(http.StatusOK)
+	ctx.Status(http.StatusCreated)
 }
