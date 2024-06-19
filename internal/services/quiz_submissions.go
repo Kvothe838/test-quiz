@@ -97,7 +97,7 @@ func (in *interactor) CalcBetterThanPercentage(ctx context.Context, submissionID
 
 	submissionToCalc, err := in.repo.GetQuizSubmission(ctx, submissionID)
 	if err != nil {
-		return 0, errors.Wrapf(err, "coul nod get quiz submission for id %d", submissionID)
+		return 0, errors.Wrapf(err, "could not get quiz submission for id %d", submissionID)
 	}
 
 	betterThanAmount := 0
@@ -116,5 +116,4 @@ func (in *interactor) CalcBetterThanPercentage(ctx context.Context, submissionID
 	betterThanPercentage := int(float64(betterThanAmount) / float64(submissionsAmount) * 100)
 
 	return betterThanPercentage, nil
-
 }

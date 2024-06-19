@@ -315,3 +315,131 @@ func TestSubmitQuiz(t *testing.T) {
 		})
 	}
 }
+
+func TestCalcBetterThanPercentage(t *testing.T) {
+	tests := []struct {
+		name           string
+		submissionID   int
+		prepareRepo    func(*MockRepository)
+		assertOnResult func(percentage int, err error)
+	}{
+		{
+			name:         "success with better than percentage calculated",
+			submissionID: 1,
+			prepareRepo: func(mock *MockRepository) {
+				submissions := []models.QuizSubmission{
+					{ID: 1, HitsAmount: 5},
+					{ID: 2, HitsAmount: 3},
+					{ID: 3, HitsAmount: 4},
+				}
+				mock.EXPECT().GetAllQuizSubmissions(
+					gomock.Any(),
+				).Return(
+					submissions,
+					nil,
+				)
+
+				mock.EXPECT().GetQuizSubmission(
+					gomock.Any(),
+					1,
+				).Return(
+					models.QuizSubmission{ID: 1, HitsAmount: 5},
+					nil,
+				)
+			},
+			assertOnResult: func(percentage int, err error) {
+				assert.NoError(t, err)
+				assert.Equal(t, percentage, 100)
+			},
+		},
+		{
+			name:         "success with no better than percentage calculated",
+			submissionID: 2,
+			prepareRepo: func(mock *MockRepository) {
+				submissions := []models.QuizSubmission{
+					{ID: 1, HitsAmount: 5},
+					{ID: 2, HitsAmount: 3},
+					{ID: 3, HitsAmount: 4},
+				}
+				mock.EXPECT().GetAllQuizSubmissions(
+					gomock.Any(),
+				).Return(
+					submissions,
+					nil,
+				)
+
+				mock.EXPECT().GetQuizSubmission(
+					gomock.Any(),
+					2,
+				).Return(
+					models.QuizSubmission{ID: 2, HitsAmount: 3},
+					nil,
+				)
+			},
+			assertOnResult: func(percentage int, err error) {
+				assert.NoError(t, err)
+				assert.Equal(t, percentage, 0)
+			},
+		},
+		{
+			name:         "error on GetAllQuizSubmissions",
+			submissionID: 1,
+			prepareRepo: func(mock *MockRepository) {
+				mock.EXPECT().GetAllQuizSubmissions(
+					gomock.Any(),
+				).Return(
+					nil,
+					errors.New("test error"),
+				)
+			},
+			assertOnResult: func(percentage int, err error) {
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, "could not get all quiz submissions")
+			},
+		},
+		{
+			name:         "error on GetQuizSubmission",
+			submissionID: 1,
+			prepareRepo: func(mock *MockRepository) {
+				mock.EXPECT().GetAllQuizSubmissions(
+					gomock.Any(),
+				).Return(
+					[]models.QuizSubmission{
+						{ID: 1, HitsAmount: 5},
+						{ID: 2, HitsAmount: 3},
+					},
+					nil,
+				)
+
+				mock.EXPECT().GetQuizSubmission(
+					gomock.Any(),
+					1,
+				).Return(
+					models.QuizSubmission{},
+					errors.New("test error"),
+				)
+			},
+			assertOnResult: func(percentage int, err error) {
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, "could not get quiz submission for id 1")
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			repo := NewMockRepository(gomock.NewController(t))
+
+			if test.prepareRepo != nil {
+				test.prepareRepo(repo)
+			}
+
+			in := services.NewInteractor(repo)
+			percentage, err := in.CalcBetterThanPercentage(context.Background(), test.submissionID)
+
+			if test.assertOnResult != nil {
+				test.assertOnResult(percentage, err)
+			}
+		})
+	}
+}
