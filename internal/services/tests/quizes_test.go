@@ -15,7 +15,7 @@ func TestGetQuiz(t *testing.T) {
 	tests := []struct {
 		name           string
 		prepareRepo    func(*MockRepository)
-		assertOnResult func(campaign models.Quiz, err error)
+		assertOnResult func(quiz models.Quiz, err error)
 	}{
 		{
 			name: "success on GetQuiz",
