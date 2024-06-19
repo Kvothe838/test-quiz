@@ -46,7 +46,7 @@ var submitQuizCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println("You were better than ", res.BetterThanPercentage, "% of all quizzers")
+		fmt.Println("You were better than ", res.BetterThanPercentage, "% of all quizzers.")
 	},
 }
 
