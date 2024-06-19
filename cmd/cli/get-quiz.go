@@ -22,8 +22,6 @@ func init() {
 	rootCmd.AddCommand(quizCmd)
 }
 
-var baseUrl = "http://localhost:8080"
-
 func getQuiz() {
 	url := fmt.Sprintf("%s/quiz", baseUrl)
 	responseBytes := getQuizData(url)

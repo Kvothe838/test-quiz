@@ -16,14 +16,14 @@ var (
 	once          sync.Once
 	defaultLogger *logrus.Logger
 	contextKeys   = []ContextKey{
-		PatientID,
+		QuestionID,
 	}
 )
 
 type ContextKey string
 
 const (
-	PatientID ContextKey = "patient_id"
+	QuestionID ContextKey = "question_id"
 )
 
 func buildLogger() *logrus.Logger {
@@ -70,8 +70,8 @@ func buildFormatter() logrus.Formatter {
 	return formatter
 }
 
-func SetPatientID(ctx context.Context, patientID string) context.Context {
-	return context.WithValue(ctx, PatientID, patientID)
+func SetQuestionID(ctx context.Context, questionID string) context.Context {
+	return context.WithValue(ctx, QuestionID, questionID)
 }
 
 func loggerWithCtx(ctx context.Context) *logrus.Entry {

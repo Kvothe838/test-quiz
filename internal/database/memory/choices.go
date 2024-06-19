@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/Kvothe838/fast-track-test-quiz/internal/models"
 	"github.com/Kvothe838/fast-track-test-quiz/internal/pkg/errors"
-	"github.com/Kvothe838/fast-track-test-quiz/internal/pkg/logger"
 	"github.com/samber/lo"
 )
 
@@ -13,7 +12,7 @@ func (r *repository) CreateChoiceSelection(ctx context.Context, selection models
 	if err != nil {
 		return err
 	}
-	logger.CtxInfof(ctx, "for question %d saving choice %d", selection.QuestionID, selection.ChoiceID)
+
 	r.currentSelectionByQuestionID[selection.QuestionID] = selection
 
 	return nil
