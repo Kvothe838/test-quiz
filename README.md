@@ -30,16 +30,51 @@ User stories/Use cases:
 
  - Create local-env/config.yaml, add same env variables than local-env/config-example.yaml.
 
- ## Run
+ ## Run backend
 
- Execute on the root of the project the following commands in different console tabs:
+ Execute on the root of the project the following command on console:
 
  ```
 make run-backend
 ```
-and
+
+## Run client
+
+To get the information of all commands for the client side, execute the following command on the root of the project:
+
 ```
 make run-client
+```
+
+Available commands:
+
+### Get quiz
+Get the current quiz with its title, description and questions. Each question has an ID and a list of choices. Each choice has an ID.
+
+Execute on the root of the project:
+
+```
+make get-quiz
+```
+
+### Select choice
+Select a choice for a question of the current quiz. Already selected choices can be overwritten.
+
+Execute on the root of the project:
+
+```
+make select-choice [question ID] [choice ID]
+```
+
+### Submit quiz
+Submit current quiz choices, getting 
+- amount of correct answers
+- information on how well it went for you compared to others that have taken the quiz
+
+Execute on the root of the project:
+
+```
+make submit-quiz
 ```
 
 ## Test
