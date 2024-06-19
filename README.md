@@ -46,6 +46,8 @@ To get the information of all commands for the client side, execute the followin
 make run-client
 ```
 
+Make sure to have backend running in another console tab or window.
+
 Available commands:
 
 ### Get quiz
