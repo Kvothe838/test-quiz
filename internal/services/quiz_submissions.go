@@ -8,7 +8,12 @@ import (
 )
 
 func (in *interactor) SubmitQuiz(ctx context.Context) (models.QuizSubmission, error) {
-	missingChoiceSelections, err := in.getMissingChoiceSelections(ctx)
+	quiz, err := in.repo.GetQuiz(ctx)
+	if err != nil {
+		return models.QuizSubmission{}, errors.Wrap(err, "could not get quiz")
+	}
+
+	missingChoiceSelections, err := in.getMissingChoiceSelections(ctx, quiz)
 	if err != nil {
 		return models.QuizSubmission{}, errors.Wrap(err, "could not get missing choice selections")
 	}
@@ -19,12 +24,7 @@ func (in *interactor) SubmitQuiz(ctx context.Context) (models.QuizSubmission, er
 
 	submission, err := in.repo.SaveQuizSubmission(ctx)
 	if err != nil {
-		return models.QuizSubmission{}, errors.Wrap(err, "could not confirm choices")
-	}
-
-	quiz, err := in.repo.GetQuiz(ctx)
-	if err != nil {
-		return models.QuizSubmission{}, errors.Wrap(err, "could not get quiz to assert results")
+		return models.QuizSubmission{}, errors.Wrap(err, "could not save quiz submission")
 	}
 
 	hitsAmount := CalcHits(quiz.Questions, submission.Selections)
@@ -66,15 +66,10 @@ func CalcHits(questions []models.Question, selections []models.ChoiceSelection) 
 	return hitsAmount
 }
 
-func (in *interactor) getMissingChoiceSelections(ctx context.Context) ([]int, error) {
+func (in *interactor) getMissingChoiceSelections(ctx context.Context, quiz models.Quiz) ([]int, error) {
 	choiceSelections, err := in.repo.GetChoiceSelections(ctx)
 	if err != nil {
-		return nil, errors.Wrap(err, "could not get choice selections")
-	}
-
-	quiz, err := in.repo.GetQuiz(ctx)
-	if err != nil {
-		return nil, errors.Wrap(err, "could not get quiz")
+		return nil, err
 	}
 
 	choiceSelectionIDByQuestionID := make(map[int]int)
