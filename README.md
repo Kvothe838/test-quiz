@@ -1,6 +1,6 @@
-﻿# Fast Track Test Quiz
+﻿# Quiz
 
- Solution for Fast Track Test Quiz.
+ This is a technical test for the hiring process of a backend developer position.
 
 Instructions:
 
